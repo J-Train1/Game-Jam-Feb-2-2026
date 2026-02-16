@@ -129,7 +129,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2064334468314783040, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
   m_PrefabInstance: {fileID: 8964376167347338763}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1569424476}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a69739ed30706114d88e355faf2d190e, type: 3}
@@ -356,6 +356,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1071419792
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1071419794}
+  - component: {fileID: 1071419793}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1071419793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071419792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 425dfa15b6532dc4fa8511d3947be1c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PeaManager
+  playerController: {fileID: 425733746}
+  peaFollowerPrefab: {fileID: 0}
+  followSpeed: 8
+  baseFollowDelay: 15
+--- !u!4 &1071419794
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071419792}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0235, y: -0.42239, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1227410050
 GameObject:
   m_ObjectHideFlags: 0
@@ -526,57 +574,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!1 &1569424476 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3101163250752596947, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
-  m_PrefabInstance: {fileID: 8964376167347338763}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1569424479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1569424476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
-  m_Actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 519420031}
---- !u!114 &1569424480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1569424476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 425dfa15b6532dc4fa8511d3947be1c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PeaManager
-  playerController: {fileID: 425733746}
-  peaFollowerPrefab: {fileID: 6688328394345037350, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
-  followSpeed: 4
-  baseFollowDelay: 20
 --- !u!1 &1872595880
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,14 +701,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2064334468314783040, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
-      propertyPath: jumpForce
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2064334468314783040, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
-      propertyPath: moveSpeed
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2064334468314783040, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
       propertyPath: groundCheck
       value: 
       objectReference: {fileID: 1872595881}
@@ -773,13 +762,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9032780890553179290, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1872595881}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3101163250752596947, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1569424479}
-    - targetCorrespondingSourceObject: {fileID: 3101163250752596947, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1569424480}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -788,5 +771,6 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 1227410051}
+  - {fileID: 1071419794}
   - {fileID: 8964376167347338763}
   - {fileID: 706045289313217855}
