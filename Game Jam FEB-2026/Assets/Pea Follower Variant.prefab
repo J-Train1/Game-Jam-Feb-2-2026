@@ -82,10 +82,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f64f390a6ed07d45b3dc819e4d78e78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PeaFollower
-  followSpeed: 8
-  followDelay: 0
-  minDistanceToMove: 0
-  minDistanceFromTarget: 1.2
+  gravityScale: 20
+  groundCheckRadius: 0.15
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
   spriteRenderer: {fileID: 8120153769649760006}
 --- !u!212 &8120153769649760006 stripped
 SpriteRenderer:
