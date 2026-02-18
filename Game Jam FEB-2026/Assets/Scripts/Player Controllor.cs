@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     private InputAction jumpAction;
 
     private PeaManager peaManager;
+    private float stackRiseTarget = 0f; // Target Y position during stacking
+    private bool isRisingForStack = false;
 
     void Awake()
     {
@@ -97,7 +99,7 @@ public class PlayerController : MonoBehaviour
             isGrounded = coyoteTimeCounter > 0f;
         }
 
-        bool stacked = peaManager != null && peaManager.IsStacked() && peaManager.GetPeaCount() > 0;
+        bool stacked = peaManager != null && peaManager.IsStackingComplete() && peaManager.GetPeaCount() > 0;
 
         // Horizontal movement
         float targetVelocityX = horizontalInput * moveSpeed;
@@ -106,7 +108,7 @@ public class PlayerController : MonoBehaviour
         else
             currentVelocityX = Mathf.MoveTowards(currentVelocityX, 0, deceleration * Time.fixedDeltaTime);
 
-        // If stacked, check if the entire stack can move before applying velocity
+        // If stacked (animation complete), check if the entire stack can move before applying velocity
         if (stacked && Mathf.Abs(currentVelocityX) > 0.01f)
         {
             Vector2 desiredPos = rb.position + new Vector2(currentVelocityX * Time.fixedDeltaTime, 0);
@@ -119,8 +121,29 @@ public class PlayerController : MonoBehaviour
 
         rb.linearVelocity = new Vector2(currentVelocityX, rb.linearVelocity.y);
 
-        // Stack floor clamping — only clamp Y, never touch X, only when falling or still
-        if (stacked && rb.linearVelocity.y <= 0)
+        // During stacking animation, progressively rise as peas stack
+        bool isStacking = peaManager != null && peaManager.IsStacked() && !peaManager.IsStackingComplete();
+        if (isStacking && peaManager.GetPeaCount() > 0)
+        {
+            RaycastHit2D stackHit = Physics2D.Raycast(transform.position, Vector2.down, 20f, groundLayer);
+            if (stackHit.collider != null)
+            {
+                float groundY = stackHit.point.y;
+                // Rise based on how many peas have ACTUALLY stacked so far
+                int stackedCount = peaManager.GetStackedPeaCount();
+                float currentStackHeight = stackedCount * peaManager.GetStackSpacing();
+                float targetY = groundY + currentStackHeight + halfHeight;
+
+                // Smoothly lerp toward target height as animation progresses
+                float currentY = rb.position.y;
+                float newY = Mathf.MoveTowards(currentY, targetY, 15f * Time.fixedDeltaTime);
+
+                rb.position = new Vector2(rb.position.x, newY);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+            }
+        }
+        // Stack floor clamping — only when animation is COMPLETE
+        else if (stacked && rb.linearVelocity.y <= 0)
         {
             RaycastHit2D stackHit = Physics2D.Raycast(transform.position, Vector2.down, 20f, groundLayer);
             if (stackHit.collider != null)

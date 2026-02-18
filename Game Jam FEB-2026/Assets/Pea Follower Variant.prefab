@@ -62,6 +62,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3101163250752596947, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 4777318382000738044}
+    - targetCorrespondingSourceObject: {fileID: 3101163250752596947, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6341147850978648524}
   m_SourcePrefab: {fileID: 100100000, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
@@ -70,6 +73,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3101163250752596947, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
   m_PrefabInstance: {fileID: 8635719040976983541}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4777318382000738044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6688328394345037350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68403fe44ed889b4e8ff95403f6ab6a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PeaDeathAnimation
+  bounceForce: 9
+  spinSpeed: 720
+  fadeStartDelay: 2
+  fadeDuration: 8
 --- !u!114 &6341147850978648524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,7 +101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f64f390a6ed07d45b3dc819e4d78e78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PeaFollower
-  gravityScale: 20
   groundCheckRadius: 0.15
   groundLayer:
     serializedVersion: 2
