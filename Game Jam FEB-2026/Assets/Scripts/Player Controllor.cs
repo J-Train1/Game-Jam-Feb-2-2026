@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private float groundCheckRadius = 0.2f;
+    [SerializeField] private float groundCheckRadius = 0.3f;
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Position History")]
@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private float currentVelocityX;
     private float halfHeight = 0.5f;
+
+    private float coyoteTimeCounter;
+    private const float coyoteTime = 0.1f; // Small buffer for ground detection
 
     private Queue<Vector2> positionHistory = new Queue<Vector2>();
 
@@ -76,7 +79,23 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        // Raycast from player center downward (avoids corner detection issues)
+        // Distance = half the player height + ground check distance
+        float rayDistance = halfHeight + groundCheckRadius;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, rayDistance, groundLayer);
+        bool groundDetected = hit.collider != null;
+
+        // Coyote time: if we detect ground, reset the timer. Otherwise count down.
+        if (groundDetected)
+        {
+            coyoteTimeCounter = coyoteTime;
+            isGrounded = true;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.fixedDeltaTime;
+            isGrounded = coyoteTimeCounter > 0f;
+        }
 
         bool stacked = peaManager != null && peaManager.IsStacked() && peaManager.GetPeaCount() > 0;
 
@@ -103,10 +122,10 @@ public class PlayerController : MonoBehaviour
         // Stack floor clamping — only clamp Y, never touch X, only when falling or still
         if (stacked && rb.linearVelocity.y <= 0)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 20f, groundLayer);
-            if (hit.collider != null)
+            RaycastHit2D stackHit = Physics2D.Raycast(transform.position, Vector2.down, 20f, groundLayer);
+            if (stackHit.collider != null)
             {
-                float groundY = hit.point.y;
+                float groundY = stackHit.point.y;
                 float stackHeight = peaManager.GetPeaCount() * peaManager.GetStackSpacing();
                 float minY = groundY + stackHeight + halfHeight;
 
@@ -149,10 +168,12 @@ public class PlayerController : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        if (groundCheck != null)
-        {
-            Gizmos.color = isGrounded ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
-        }
+        Gizmos.color = isGrounded ? Color.green : Color.red;
+        // Draw the downward raycast from player center
+        float rayDistance = halfHeight + groundCheckRadius;
+        Vector3 start = transform.position;
+        Vector3 end = start + Vector3.down * rayDistance;
+        Gizmos.DrawLine(start, end);
+        Gizmos.DrawWireSphere(end, 0.05f);
     }
 }
