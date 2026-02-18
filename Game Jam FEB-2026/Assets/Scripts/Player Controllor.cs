@@ -17,45 +17,38 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Position History")]
-    [SerializeField] private int historySize = 120; // 2 seconds at 60fps
+    [SerializeField] private int historySize = 120;
 
     private Rigidbody2D rb;
     private float horizontalInput;
     private bool jumpPressed;
     private bool isGrounded;
     private float currentVelocityX;
+    private float halfHeight = 0.5f;
 
-    // Position history for followers
     private Queue<Vector2> positionHistory = new Queue<Vector2>();
 
-    // Input Actions
     private PlayerInput playerInput;
     private InputAction moveAction;
     private InputAction jumpAction;
+
+    private PeaManager peaManager;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
 
-        // Initialize position history
         for (int i = 0; i < historySize; i++)
-        {
             positionHistory.Enqueue(transform.position);
-        }
 
-        // Get PlayerInput component (add it in Inspector if not present)
         playerInput = GetComponent<PlayerInput>();
-
         if (playerInput != null)
         {
-            // Get actions from the Input Action Asset
             moveAction = playerInput.actions["Move"];
             jumpAction = playerInput.actions["Jump"];
         }
-        else
-        {
-            Debug.LogWarning("PlayerInput component not found. Add it to use Input System.");
-        }
+
+        peaManager = GetComponent<PeaManager>();
     }
 
     void OnEnable()
@@ -72,99 +65,88 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Get input from new Input System
         if (moveAction != null)
-        {
             horizontalInput = moveAction.ReadValue<Vector2>().x;
-        }
 
         if (jumpAction != null && jumpAction.WasPressedThisFrame())
-        {
             jumpPressed = true;
-        }
 
-        // Record position history every frame
         RecordPosition();
-
-        // Debug logging
-        if (horizontalInput != 0)
-        {
-            Debug.Log($"Horizontal Input: {horizontalInput}");
-        }
-        if (jumpPressed)
-        {
-            Debug.Log($"Jump Pressed! Grounded: {isGrounded}");
-        }
     }
 
     void FixedUpdate()
     {
-        // Ground check
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        // Handle horizontal movement with acceleration/deceleration
-        float targetVelocityX = horizontalInput * moveSpeed;
+        bool stacked = peaManager != null && peaManager.IsStacked() && peaManager.GetPeaCount() > 0;
 
+        // Horizontal movement
+        float targetVelocityX = horizontalInput * moveSpeed;
         if (horizontalInput != 0)
-        {
-            // Accelerate
             currentVelocityX = Mathf.MoveTowards(currentVelocityX, targetVelocityX, acceleration * Time.fixedDeltaTime);
-        }
         else
-        {
-            // Decelerate
             currentVelocityX = Mathf.MoveTowards(currentVelocityX, 0, deceleration * Time.fixedDeltaTime);
+
+        // If stacked, check if the entire stack can move before applying velocity
+        if (stacked && Mathf.Abs(currentVelocityX) > 0.01f)
+        {
+            Vector2 desiredPos = rb.position + new Vector2(currentVelocityX * Time.fixedDeltaTime, 0);
+            if (!peaManager.CanStackMove(desiredPos))
+            {
+                // Stack is blocked by a wall — stop horizontal movement
+                currentVelocityX = 0;
+            }
         }
 
         rb.linearVelocity = new Vector2(currentVelocityX, rb.linearVelocity.y);
 
-        // Handle jump
-        if (jumpPressed && isGrounded)
+        // Stack floor clamping — only clamp Y, never touch X, only when falling or still
+        if (stacked && rb.linearVelocity.y <= 0)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            Debug.Log("JUMP!");
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 20f, groundLayer);
+            if (hit.collider != null)
+            {
+                float groundY = hit.point.y;
+                float stackHeight = peaManager.GetPeaCount() * peaManager.GetStackSpacing();
+                float minY = groundY + stackHeight + halfHeight;
+
+                if (rb.position.y < minY)
+                {
+                    // Directly set Y only — X already correct from velocity above
+                    rb.position = new Vector2(rb.position.x, minY);
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+                    isGrounded = true;
+                }
+            }
         }
 
+        // Jump
+        if (jumpPressed)
+        {
+            if (isGrounded)
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            else
+                Debug.Log($"Jump blocked: isGrounded={isGrounded}, position={transform.position}, stacked={stacked}");
+        }
         jumpPressed = false;
-
-        // Debug every 60 frames
-        if (Time.frameCount % 60 == 0)
-        {
-            Debug.Log($"Grounded: {isGrounded}, VelocityX: {currentVelocityX}, VelocityY: {rb.linearVelocity.y}");
-        }
     }
 
     private void RecordPosition()
     {
-        // Add current position to history
         positionHistory.Enqueue(transform.position);
-
-        // Remove oldest position if we exceed history size
         if (positionHistory.Count > historySize)
-        {
             positionHistory.Dequeue();
-        }
     }
 
     public Vector2 GetHistoricalPosition(int framesAgo)
     {
-        // Clamp to valid range
         framesAgo = Mathf.Clamp(framesAgo, 0, positionHistory.Count - 1);
-
-        // Convert queue to array to access by index
         Vector2[] historyArray = positionHistory.ToArray();
-
-        // Get position from history (newer positions are at the end)
-        int index = historyArray.Length - 1 - framesAgo;
-        return historyArray[index];
+        return historyArray[historyArray.Length - 1 - framesAgo];
     }
 
-    public int GetHistorySize()
-    {
-        return historySize;
-    }
+    public int GetHistorySize() => historySize;
 
-    // Visual debug for ground check
     void OnDrawGizmosSelected()
     {
         if (groundCheck != null)
