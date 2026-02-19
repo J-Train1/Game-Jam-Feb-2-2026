@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 724937f837d686d4ca7261c468e11e5b
+guid: 2eff62ee0bc3107438c47eecbf4ae1b9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -155890402574889300
-    second: TestTile2_0
+      213: 8371019140385695755
+    second: GroundTiles_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 500
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TestTile2_0
+      name: GroundTiles_0
       rect:
         serializedVersion: 2
         x: 0
@@ -121,15 +121,37 @@ TextureImporter:
         width: 500
         height: 500
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cae81aa318a26ddf0800000000000000
-      internalID: -155890402574889300
+      spriteID: b086fae7e85db2470800000000000000
+      internalID: 8371019140385695755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundTiles_1
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 0
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab7825041dae12f4eacdfd715691e40b
+      internalID: 189233840
       vertices: []
       indices: 
       edges: []
@@ -138,7 +160,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: d907f6ff965c38c4f95bfa004197d96d
     internalID: 0
     vertices: []
     indices: 
@@ -146,9 +168,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":500.0,"y":500.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      TestTile2_0: -155890402574889300
+      GroundTiles_0: 8371019140385695755
+      GroundTiles_1: 189233840
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
