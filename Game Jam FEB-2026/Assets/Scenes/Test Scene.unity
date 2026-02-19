@@ -1931,6 +1931,8 @@ MonoBehaviour:
   peaFollowerPrefab: {fileID: 6688328394345037350, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
   frameDelay: 7
   stackSpacing: 1
+  stackAnimationSpeed: 0.08
+  stackLerpSpeed: 25
 --- !u!114 &1569424483
 MonoBehaviour:
   m_ObjectHideFlags: 0
