@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
             isGrounded = coyoteTimeCounter > 0f;
         }
 
-        bool stacked = peaManager != null && peaManager.IsStackingComplete() && peaManager.GetPeaCount() > 0;
+        bool stacked = peaManager != null && peaManager.IsStacked() && peaManager.GetPeaCount() > 0;
 
         // Horizontal movement
         float targetVelocityX = horizontalInput * moveSpeed;
@@ -122,27 +122,26 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector2(currentVelocityX, rb.linearVelocity.y);
 
         // During stacking animation, progressively rise as peas stack
-        bool isStacking = peaManager != null && peaManager.IsStacked() && !peaManager.IsStackingComplete();
-        if (isStacking && peaManager.GetPeaCount() > 0)
+        bool isStackingNow = peaManager != null && peaManager.IsStacking();
+        if (isStackingNow && peaManager.GetPeaCount() > 0)
         {
             RaycastHit2D stackHit = Physics2D.Raycast(transform.position, Vector2.down, 20f, groundLayer);
             if (stackHit.collider != null)
             {
                 float groundY = stackHit.point.y;
-                // Rise based on how many peas have ACTUALLY stacked so far
                 int stackedCount = peaManager.GetStackedPeaCount();
                 float currentStackHeight = stackedCount * peaManager.GetStackSpacing();
                 float targetY = groundY + currentStackHeight + halfHeight;
 
-                // Smoothly lerp toward target height as animation progresses
-                float currentY = rb.position.y;
-                float newY = Mathf.MoveTowards(currentY, targetY, 15f * Time.fixedDeltaTime);
+                Debug.Log($"Rising: stackedCount={stackedCount}, currentY={rb.position.y:F2}, targetY={targetY:F2}");
 
+                // Smoothly rise to match current stack height
+                float newY = Mathf.MoveTowards(rb.position.y, targetY, 20f * Time.fixedDeltaTime);
                 rb.position = new Vector2(rb.position.x, newY);
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
             }
         }
-        // Stack floor clamping — only when animation is COMPLETE
+        // Stack floor clamping — when animation complete, lock to full height
         else if (stacked && rb.linearVelocity.y <= 0)
         {
             RaycastHit2D stackHit = Physics2D.Raycast(transform.position, Vector2.down, 20f, groundLayer);
@@ -163,13 +162,8 @@ public class PlayerController : MonoBehaviour
         }
 
         // Jump
-        if (jumpPressed)
-        {
-            if (isGrounded)
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            else
-                Debug.Log($"Jump blocked: isGrounded={isGrounded}, position={transform.position}, stacked={stacked}");
-        }
+        if (jumpPressed && isGrounded)
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         jumpPressed = false;
     }
 

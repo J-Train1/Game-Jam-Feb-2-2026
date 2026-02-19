@@ -14,7 +14,7 @@ public class PeaManager : MonoBehaviour
     [Header("Stack Settings")]
     [SerializeField] private float stackSpacing = 1.0f;
     [SerializeField] private float stackAnimationSpeed = 0.08f; // Time between each pea stacking
-    [SerializeField] private float stackLerpSpeed = 25f; // How fast peas move into position (higher = faster)
+    [SerializeField] private float stackLerpSpeed = 100f; // How fast peas move into position (very high = instant)
 
     private List<Vector2> positionHistory = new List<Vector2>();
     private List<PeaFollower> peaChain = new List<PeaFollower>();
@@ -36,48 +36,32 @@ public class PeaManager : MonoBehaviour
         var keyboard = Keyboard.current;
         if (keyboard == null) return;
 
-        if (keyboard.upArrowKey.wasPressedThisFrame && peaChain.Count > 0 && !isStacked)
+        // Input detection in Update - just set flags
+        if (keyboard.upArrowKey.wasPressedThisFrame && peaChain.Count > 0 && !isStacked && !isStacking)
         {
             // Start stacking animation
+            Debug.Log("Starting stack animation!");
             isStacking = true;
-            stackedPeaCount = Mathf.Min(2, peaChain.Count); // Start with 2 peas already stacked
+            isStacked = false; // Not fully stacked yet
+            stackedPeaCount = 1; // Start with just 1 pea stacked
             stackAnimationTimer = 0f;
 
-            // If we have 2 or fewer peas, we're already done
-            if (stackedPeaCount >= peaChain.Count)
+            // Only skip animation if we have no peas (shouldn't happen but safety check)
+            if (peaChain.Count == 0)
             {
                 isStacking = false;
                 isStacked = true;
+                stackedPeaCount = 0;
+                Debug.Log("No peas to stack!");
             }
         }
 
-        if (keyboard.downArrowKey.wasPressedThisFrame && isStacked)
+        if (keyboard.downArrowKey.wasPressedThisFrame && (isStacked || isStacking))
         {
-            // Instantly unstack all
+            Debug.Log("Unstacking!");
             isStacked = false;
             isStacking = false;
             stackedPeaCount = 0;
-        }
-
-        // Animate stacking
-        if (isStacking)
-        {
-            stackAnimationTimer += Time.deltaTime;
-
-            if (stackAnimationTimer >= stackAnimationSpeed)
-            {
-                stackAnimationTimer = 0f;
-                stackedPeaCount++;
-                Debug.Log($"Stacking animation: {stackedPeaCount} / {peaChain.Count} peas stacked");
-
-                // Once all peas are stacked, finish animation
-                if (stackedPeaCount >= peaChain.Count)
-                {
-                    isStacking = false;
-                    isStacked = true;
-                    Debug.Log("Stacking complete!");
-                }
-            }
         }
     }
 
@@ -87,6 +71,37 @@ public class PeaManager : MonoBehaviour
         int maxHistory = (peaChain.Count + 1) * frameDelay + 1;
         if (positionHistory.Count > maxHistory)
             positionHistory.RemoveRange(maxHistory, positionHistory.Count - maxHistory);
+
+        // Stacking animation in FixedUpdate - syncs with PlayerController
+        if (isStacking)
+        {
+            stackAnimationTimer += Time.fixedDeltaTime;
+
+            if (stackAnimationTimer >= stackAnimationSpeed)
+            {
+                stackAnimationTimer = 0f;
+                stackedPeaCount++;
+                Debug.Log($"Stacking animation: {stackedPeaCount} / {peaChain.Count} peas stacked");
+
+                // Complete animation AFTER last pea has had time to stack
+                if (stackedPeaCount > peaChain.Count)
+                {
+                    isStacking = false;
+                    isStacked = true;
+                    stackedPeaCount = peaChain.Count; // Cap it
+                    Debug.Log("Stacking complete!");
+
+                    // IMMEDIATELY update all pea positions to player-relative (smooth transition)
+                    Vector2 playerPos = playerController.transform.position;
+                    for (int i = 0; i < peaChain.Count; i++)
+                    {
+                        Vector2 newPos = playerPos + Vector2.down * stackSpacing * (i + 1);
+                        currentPeaPositions[i] = newPos;
+                        peaChain[i].SetPosition(newPos, false);
+                    }
+                }
+            }
+        }
 
         UpdatePeaPositions();
     }
@@ -102,14 +117,25 @@ public class PeaManager : MonoBehaviour
 
             for (int i = 0; i < peaChain.Count; i++)
             {
-                // Check if this pea has stacked yet
-                // Stack from the front (pea 0 first, then 1, then 2...)
                 bool thispeaHasStacked = (i < stackedPeaCount) || isStacked;
 
                 if (thispeaHasStacked)
                 {
-                    // This pea is in stack formation at position (i+1) below player
-                    Vector2 targetPos = playerPos + Vector2.down * stackSpacing * (i + 1);
+                    Vector2 targetPos;
+
+                    if (isStacking)
+                    {
+                        // DURING ANIMATION: Stack UP from ground (fixed target, player rises independently)
+                        RaycastHit2D groundHit = Physics2D.Raycast(playerPos, Vector2.down, 20f, LayerMask.GetMask("Ground"));
+                        Vector2 stackBasePos = groundHit.collider != null ? groundHit.point : playerPos;
+                        targetPos = stackBasePos + Vector2.up * stackSpacing * (i + 1);
+                    }
+                    else
+                    {
+                        // AFTER ANIMATION: Stack DOWN from player (moves as one unit)
+                        targetPos = playerPos + Vector2.down * stackSpacing * (i + 1);
+                    }
+
                     desiredPositions.Add(targetPos);
                 }
                 else
@@ -144,28 +170,15 @@ public class PeaManager : MonoBehaviour
                 }
             }
 
-            // Update positions - always lerp for smooth movement
+            // Update positions
             if (!stackBlocked)
             {
                 for (int i = 0; i < peaChain.Count; i++)
                 {
                     bool thispeaHasStacked = (i < stackedPeaCount) || isStacked;
 
-                    if (thispeaHasStacked)
-                    {
-                        // Stacked peas lerp smoothly
-                        currentPeaPositions[i] = Vector2.MoveTowards(
-                            currentPeaPositions[i],
-                            desiredPositions[i],
-                            stackLerpSpeed * Time.fixedDeltaTime
-                        );
-                    }
-                    else
-                    {
-                        // Following peas move instantly to follow position
-                        currentPeaPositions[i] = desiredPositions[i];
-                    }
-
+                    // All peas snap instantly to their target positions
+                    currentPeaPositions[i] = desiredPositions[i];
                     peaChain[i].SetPosition(currentPeaPositions[i], !thispeaHasStacked);
                 }
             }
@@ -215,6 +228,7 @@ public class PeaManager : MonoBehaviour
 
     public float GetStackSpacing() => stackSpacing;
     public bool IsStacked() => isStacked;
+    public bool IsStacking() => isStacking; // Animation in progress
     public bool IsStackingComplete() => isStacked && !isStacking; // Only true when fully stacked
     public int GetPeaCount() => peaChain.Count;
     public int GetStackedPeaCount() => stackedPeaCount; // How many peas have stacked so far
