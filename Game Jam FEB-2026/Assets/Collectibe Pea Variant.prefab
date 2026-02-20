@@ -58,11 +58,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6688328394345037350, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6341147850978648524, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6688328394345037350, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3343810251535746220}
   m_SourcePrefab: {fileID: 100100000, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
+--- !u!1 &1562698214870419743 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6688328394345037350, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
+  m_PrefabInstance: {fileID: 5295782921211557689}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3343810251535746220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562698214870419743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8c82cb1565928f41b83028bc20dbcb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollectiblePea
+  useTag: 1
+  playerTag: Player
+  bobSpeed: 2
+  bobHeight: 0.2
+  enableBobbing: 1

@@ -177,6 +177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7119935499998855944, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
+    - {fileID: 3343810251535746220, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -334,7 +335,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1245,6 +1246,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7119935499998855944, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
+    - {fileID: 3343810251535746220, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1337,6 +1339,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7119935499998855944, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
+    - {fileID: 3343810251535746220, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1952,6 +1955,27 @@ MonoBehaviour:
   hazardTag: Hazard
   damageColor: {r: 0.23812106, g: 0.5320754, b: 0.1997792, a: 1}
   flashDuration: 0.5
+--- !u!114 &1569424484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569424476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4ee13a1e7c940f4badf4dcc5840a6d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThrowingSystem
+  maxThrowForce: 23
+  dragScale: 0.5
+  thrownPeaPrefab: {fileID: 1562698214870419743, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
+  trajectoryLine: {fileID: 0}
+  trajectoryPointCount: 20
+  trajectoryTimeStep: 0.2
+  trajectoryColor: {r: 1, g: 1, b: 1, a: 1}
+  peaManager: {fileID: 1569424480}
+  mainCamera: {fileID: 519420031}
 --- !u!1 &1574084417
 GameObject:
   m_ObjectHideFlags: 0
@@ -2168,6 +2192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7119935499998855944, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
+    - {fileID: 3343810251535746220, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -2260,6 +2285,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7119935499998855944, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
+    - {fileID: 3343810251535746220, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -2521,6 +2547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7119935499998855944, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
+    - {fileID: 3343810251535746220, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -2651,6 +2678,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3101163250752596947, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1569424483}
+    - targetCorrespondingSourceObject: {fileID: 3101163250752596947, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1569424484}
   m_SourcePrefab: {fileID: 100100000, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

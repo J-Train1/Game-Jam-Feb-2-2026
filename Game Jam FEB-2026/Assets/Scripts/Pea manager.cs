@@ -234,6 +234,21 @@ public class PeaManager : MonoBehaviour
     public int GetStackedPeaCount() => stackedPeaCount; // How many peas have stacked so far
     public List<PeaFollower> GetPeaChain() => peaChain;
 
+    // Remove last pea for throwing - returns the removed pea
+    public PeaFollower RemoveLastPea()
+    {
+        if (peaChain.Count == 0)
+            return null;
+
+        PeaFollower lastPea = peaChain[peaChain.Count - 1];
+        peaChain.RemoveAt(peaChain.Count - 1);
+        currentPeaPositions.RemoveAt(currentPeaPositions.Count - 1);
+
+        Debug.Log($"Removed pea for throwing. Remaining: {peaChain.Count}");
+
+        return lastPea;
+    }
+
     // Check if the entire stack (including player) can move in a direction
     public bool CanStackMove(Vector2 playerDesiredPos)
     {
