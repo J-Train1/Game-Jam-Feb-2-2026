@@ -76,4 +76,18 @@ public class PeaFollower : MonoBehaviour
     {
         return spriteRenderer;
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // Check if we hit a hazard
+        if (other.CompareTag("Hazard"))
+        {
+            // Find the HealthSystem and trigger damage
+            HealthSystem healthSystem = FindObjectOfType<HealthSystem>();
+            if (healthSystem != null)
+            {
+                healthSystem.TakeDamage();
+            }
+        }
+    }
 }
