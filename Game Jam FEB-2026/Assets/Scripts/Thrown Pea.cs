@@ -60,6 +60,31 @@ public class ThrownPea : MonoBehaviour
         if (hasLanded)
             return;
 
+        // Raycast check for hazards (backup in case collision detection misses fast-moving peas)
+        if (Time.time - timeThrown > 0.1f)
+        {
+            Vector2 velocity = rb.linearVelocity;
+            if (velocity.magnitude > 0.1f)
+            {
+                float rayDistance = velocity.magnitude * Time.fixedDeltaTime + 0.5f;
+
+                // Check ALL layers to see what we're hitting
+                RaycastHit2D[] allHits = Physics2D.RaycastAll(transform.position, velocity.normalized, rayDistance);
+
+                foreach (RaycastHit2D hit in allHits)
+                {
+                    Debug.Log($"Raycast hit: {hit.collider.gameObject.name}, Tag: {hit.collider.tag}, Layer: {LayerMask.LayerToName(hit.collider.gameObject.layer)}");
+
+                    if (hit.collider.CompareTag("Hazard"))
+                    {
+                        Debug.Log("ThrownPea detected hazard via raycast - TRIGGERING DEATH");
+                        TriggerDeathAnimation();
+                        return;
+                    }
+                }
+            }
+        }
+
         if (Time.time - timeThrown > timeBeforeConversion)
         {
             Debug.Log("ThrownPea: Max time reached, forcing conversion");
@@ -98,10 +123,12 @@ public class ThrownPea : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log($"OnCollisionEnter2D: {collision.gameObject.name}, Tag: '{collision.gameObject.tag}'");
+
         // Check if we hit a hazard
         if (collision.gameObject.CompareTag("Hazard"))
         {
-            Debug.Log("ThrownPea hit hazard - triggering death animation");
+            Debug.Log("ThrownPea hit hazard (collision) - triggering death animation");
             TriggerDeathAnimation();
             return;
         }
@@ -115,9 +142,30 @@ public class ThrownPea : MonoBehaviour
         Debug.Log($"ThrownPea hit: {collision.gameObject.name}, velocity: {rb.linearVelocity.magnitude:F2}");
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log($"OnTriggerEnter2D: {other.gameObject.name}, Tag: '{other.tag}'");
+
+        // Check if we hit a hazard (for trigger colliders)
+        if (other.CompareTag("Hazard"))
+        {
+            Debug.Log("ThrownPea hit hazard (trigger) - triggering death animation");
+            TriggerDeathAnimation();
+        }
+    }
+
     void TriggerDeathAnimation()
     {
         hasLanded = true; // Stop other conversion checks
+
+        // Set pea to green color (#3D8833) before death animation
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr != null)
+        {
+            // Convert hex #3D8833 to Color
+            Color deathColor = new Color(0x3D / 255f, 0x88 / 255f, 0x33 / 255f, 1f);
+            sr.color = deathColor;
+        }
 
         // Check if this pea has the death animation component
         PeaDeathAnimation deathAnim = GetComponent<PeaDeathAnimation>();
