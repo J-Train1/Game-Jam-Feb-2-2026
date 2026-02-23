@@ -1,2 +1,12 @@
 fileFormatVersion: 2
 guid: ab29e387273739e479dc3bc1ac8d8f1f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - collectiblePeaPrefab: {fileID: 1562698214870419743, guid: 3cdbef2adc6378b4f92c643258c06275, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
