@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 533861696717419251, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1742115141126475813, guid: a915099e1972c57489ae91ff09e2b1d5, type: 3}
     - target: {fileID: 2064334468314783040, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
       propertyPath: groundLayer.m_Bits
       value: 8
@@ -15,6 +19,22 @@ PrefabInstance:
     - target: {fileID: 3101163250752596947, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
       propertyPath: m_Name
       value: Pea Follower Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 5851258620522762293, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5851258620522762293, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5851258620522762293, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5851258620522762293, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9032780890553179290, guid: 1a67b9862ba99e741a69a536d4cafa2f, type: 3}
       propertyPath: m_LocalPosition.x

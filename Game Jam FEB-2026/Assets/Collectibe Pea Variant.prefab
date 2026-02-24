@@ -52,6 +52,22 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2804585883577157056, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2804585883577157056, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2804585883577157056, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2804585883577157056, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6688328394345037350, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
       propertyPath: m_Name
       value: Collectibe Pea Variant
@@ -60,6 +76,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8120153769649760006, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1742115141126475813, guid: a915099e1972c57489ae91ff09e2b1d5, type: 3}
     m_RemovedComponents:
     - {fileID: 6341147850978648524, guid: 3b6a3ae6d86a27047b71fffcf97a2347, type: 3}
     m_RemovedGameObjects: []
