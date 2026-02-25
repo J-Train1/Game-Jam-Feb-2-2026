@@ -6,7 +6,7 @@ public class HealthSystem : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PeaManager peaManager;
-    [SerializeField] private GameObject gameOverCanvas;
+    [SerializeField] private GameOverScreen gameOverScreen; // Reference to game over controller
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
 
     [Header("Damage Settings")]
@@ -24,9 +24,6 @@ public class HealthSystem : MonoBehaviour
     {
         if (peaManager == null)
             peaManager = GetComponent<PeaManager>();
-
-        if (gameOverCanvas != null)
-            gameOverCanvas.SetActive(false);
 
         if (playerSpriteRenderer == null)
             playerSpriteRenderer = GetComponent<SpriteRenderer>();
@@ -139,23 +136,30 @@ public class HealthSystem : MonoBehaviour
         isDead = true;
         Debug.Log("Player died!");
 
-        if (gameOverCanvas != null)
-            gameOverCanvas.SetActive(true);
-
-        // Freeze the game
-        Time.timeScale = 0f;
+        // Call game over screen
+        if (gameOverScreen != null)
+        {
+            gameOverScreen.ShowGameOver();
+        }
+        else
+        {
+            // Fallback if no game over screen assigned
+            Debug.LogWarning("No GameOverScreen assigned to HealthSystem!");
+            Time.timeScale = 0f;
+        }
     }
 
+    // DEPRECATED - keeping for backward compatibility, but GameOverScreen handles this now
     public void Restart()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    // DEPRECATED - keeping for backward compatibility, but GameOverScreen handles this now
     public void MainMenu()
     {
         Time.timeScale = 1f;
-        // Replace "MainMenu" with your actual main menu scene name
         SceneManager.LoadScene("MainMenu");
     }
 
