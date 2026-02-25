@@ -32,26 +32,44 @@ public class BossEnemy : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (isDefeated) return;
+        Debug.Log($"Boss OnCollisionEnter2D with: {collision.gameObject.name}");
+
+        if (isDefeated)
+        {
+            Debug.Log("Boss already defeated, ignoring collision");
+            return;
+        }
 
         // Check if hit by thrown pea
         ThrownPea thrownPea = collision.gameObject.GetComponent<ThrownPea>();
 
+        Debug.Log($"ThrownPea component: {(thrownPea != null ? "FOUND" : "NOT FOUND")}");
+
         if (thrownPea != null)
         {
+            Debug.Log("Boss hit by thrown pea!");
             HitByPea();
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (isDefeated) return;
+        Debug.Log($"Boss OnTriggerEnter2D with: {other.gameObject.name}");
+
+        if (isDefeated)
+        {
+            Debug.Log("Boss already defeated, ignoring trigger");
+            return;
+        }
 
         // Also check trigger collisions
         ThrownPea thrownPea = other.GetComponent<ThrownPea>();
 
+        Debug.Log($"ThrownPea component: {(thrownPea != null ? "FOUND" : "NOT FOUND")}");
+
         if (thrownPea != null)
         {
+            Debug.Log("Boss hit by thrown pea (trigger)!");
             HitByPea();
         }
     }

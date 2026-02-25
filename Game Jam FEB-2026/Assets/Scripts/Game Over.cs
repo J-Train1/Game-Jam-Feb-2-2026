@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class GameOverScreen : MonoBehaviour
 {
     [Header("Scene Names")]
-    [SerializeField] private string mainMenuSceneName = "MainMenu";
+    [SerializeField] private string mainMenuSceneName = "Main Menu";
     [SerializeField] private string currentLevelName = "Map"; // Name of current level to restart
 
     [Header("Game Over UI")]
@@ -64,12 +64,36 @@ public class GameOverScreen : MonoBehaviour
     // Called by Main Menu button
     public void GoToMainMenu()
     {
-        Debug.Log("Returning to main menu");
+        Debug.Log($"GoToMainMenu called! Attempting to load scene: '{mainMenuSceneName}'");
 
         // Unpause game before loading
         Time.timeScale = 1f;
 
+        // Check if scene exists in build settings
+        int sceneCount = SceneManager.sceneCountInBuildSettings;
+        bool sceneFound = false;
+
+        for (int i = 0; i < sceneCount; i++)
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+            string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+            Debug.Log($"Build setting scene {i}: '{sceneName}'");
+
+            if (sceneName == mainMenuSceneName)
+            {
+                sceneFound = true;
+                Debug.Log($"Found matching scene at index {i}!");
+            }
+        }
+
+        if (!sceneFound)
+        {
+            Debug.LogError($"Scene '{mainMenuSceneName}' NOT FOUND in Build Settings! Add it via File > Build Settings");
+            return;
+        }
+
         // Load main menu
+        Debug.Log($"Loading scene: '{mainMenuSceneName}'");
         SceneManager.LoadScene(mainMenuSceneName);
     }
 
